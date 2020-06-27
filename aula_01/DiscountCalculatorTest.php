@@ -4,7 +4,7 @@
 class DiscountCalculatorTest
 {
 
-    public function ShoudApply_WhenValueIsAboveTheMinimum(){
+    public function ShoudApply_WhenValueIsAboveTheMinimumTest(){
 
         $discountCalculator = new DiscountCalculator();
 
@@ -18,13 +18,22 @@ class DiscountCalculatorTest
 
     public function assertEquals ($expectedValue, $actualValue){
 
-        if($expectedValue != $actualValue){
-            $message = 'Expected: ' . $expectedValue . ' but got: ' . $actualValue;
-            throw \Exception($message);
+        try {
+           $this->compareValue($expectedValue,$actualValue);
+        }catch (Exception $e){
+            echo 'Message: ' .$e->getMessage(). "\n";
         }
 
         echo "Test passed! \n";
 
+    }
+
+    public function compareValue($expectedValue,$actualValue){
+        if($expectedValue !== $actualValue){
+            $message =  "\n".'Expected: ' . $expectedValue . ' but got: ' . $actualValue;
+            throw new Exception($message);
+        }
+        return true;
     }
 
 }
