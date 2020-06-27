@@ -3,5 +3,5 @@
 include 'autoloader.php';
 
 $discountCalculator = new DiscountCalculator();
-echo $discountCalculator->apply(110)."\n";
+echo $discountCalculator->apply(130) . "\n";
 
