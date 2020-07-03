@@ -8,24 +8,23 @@ use PHPUnit\Framework\TestCase;
 class NotEmptyValidatorTest extends TestCase
 {
 
-    public function testShouldNotBeValidWhenValueIsEmpty(){
+    public function testIsValid(){
 
-        $emptyValue = "";
-        $notEmptyValidator = new NotEmptyValidator($emptyValue);
+        $dataProvider = [
+            ""  => false,
+            "foo" => true
+        ];
+        foreach ($dataProvider as $value => $expectedResult){
 
-        $isValid = $notEmptyValidator->isValid();
+            $notEmptyValidator = new NotEmptyValidator($value);
 
-        $this->assertFalse($isValid);
+            $isValid = $notEmptyValidator->isValid();
+
+            $this->assertEquals($expectedResult,$isValid);
+        }
+
     }
 
-    public function testShouldBeValidWhenValueIsEmpty(){
 
-        $notEmptyValue = "food";
-        $notEmptyValidator = new NotEmptyValidator($notEmptyValue);
-
-        $isValid = $notEmptyValidator->isValid();
-
-        $this->assertTrue($isValid);
-    }
 
 }
