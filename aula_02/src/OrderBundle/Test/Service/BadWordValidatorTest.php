@@ -18,8 +18,8 @@ class BadWordValidatorTest extends TestCase
 
         $badWordsValidator = new BadWordsValidator($badWordRepository);
 
-        $hasBadword = $badWordsValidator->hasBadWords('seu restaurante é muito');
+        $hasBadword = $badWordsValidator->hasBadWords('seu restaurante é muito bobo');
 
-        $this->assertEquals(false, $hasBadword);
+        $this->assertEquals(true, $hasBadword);
     }
 }
