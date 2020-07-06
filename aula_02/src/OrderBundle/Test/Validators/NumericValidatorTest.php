@@ -2,7 +2,6 @@
 
 namespace OrderBundle\Validators\Test;
 
-use OrderBundle\Validators\NotEmptyValidator;
 use OrderBundle\Validators\NumericValidator;
 use PHPUnit\Framework\TestCase;
 
