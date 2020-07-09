@@ -5,12 +5,12 @@ namespace FidelityProgramBundle\Test\Service;
 use FidelityProgramBundle\Repository\PointsRepository;
 use FidelityProgramBundle\Service\FidelityProgramService;
 use FidelityProgramBundle\Service\PointsCalculator;
-
+use MyFramework\LoggerInterface;
 use OrderBundle\Entity\Customer;
 use PHPUnit\Framework\TestCase;
 
-class FidelityProgramServiceTest extends TestCase {
-
+class FidelityProgramServiceTest extends TestCase
+{
     /**
      * @test
      */
@@ -22,10 +22,10 @@ class FidelityProgramServiceTest extends TestCase {
 
         $pointsCalculator = $this->createMock(PointsCalculator::class);
         $pointsCalculator->method('calculatePointsToReceive')
-            ->willReturn(110);
+            ->willReturn(100);
 
         $allMessages = [];
-        $logger = $this->createMock(\MyFramework\LoggerInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $logger->method('log')
             ->will($this->returnCallback(
                 function ($message) use (&$allMessages) {
@@ -63,14 +63,16 @@ class FidelityProgramServiceTest extends TestCase {
         $pointsCalculator->method('calculatePointsToReceive')
             ->willReturn(0);
 
-        $fidelityProgramService = new FidelityProgramService($pointsRepository, $pointsCalculator);
+        $logger = $this->createMock(LoggerInterface::class);
+
+        $fidelityProgramService = new FidelityProgramService(
+            $pointsRepository,
+            $pointsCalculator,
+            $logger
+        );
 
         $customer = $this->createMock(Customer::class);
         $value = 20;
-
-        $fidelityProgramService->addPoints($customer,$value);
-
+        $fidelityProgramService->addPoints($customer, $value);
     }
-
-
 }

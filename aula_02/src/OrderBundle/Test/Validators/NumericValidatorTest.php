@@ -12,25 +12,20 @@ class NumericValidatorTest extends TestCase
      */
     public function testIsValid($value, $expectedResult)
     {
-
         $numericValidator = new NumericValidator($value);
 
         $isValid = $numericValidator->isValid();
 
         $this->assertEquals($expectedResult, $isValid);
-
     }
 
     public function valueProvider()
     {
         return [
-            'shouldBeValidWhenValueIsANumber' => ['value' => 20,'expectedResult' => true],
-            'shouldBeValidWhenValueIsANumericString' => ['value' => '20','expectedResult' => true],
-            'shouldNotBeValidWhenValueIsNotANumber' => ['value' => 'bla','expectedResult' => false],
-            'shouldNotBeValidWhenValueIsEmpty' => ['value' => 'bla','expectedResult' => false],
+            'shouldBeValidWhenValueIsANumber' => ['value' => 20, 'expectedResult' => true],
+            'shouldBeValidWhenValueIsANumericString' => ['value' => '20', 'expectedResult' => true],
+            'shouldNotBeValidWhenValueIsNotANumber' => ['value' => 'bla', 'expectedResult' => false],
+            'shouldNotBeValidWhenValueIsEmpty' => ['value' => '', 'expectedResult' => false],
         ];
     }
-
-
-
 }

@@ -12,25 +12,20 @@ class CreditCardNumberValidatorTest extends TestCase
      */
     public function testIsValid($value, $expectedResult)
     {
-
         $creditCardNumberValidator = new CreditCardNumberValidator($value);
 
         $isValid = $creditCardNumberValidator->isValid();
 
         $this->assertEquals($expectedResult, $isValid);
-
     }
 
     public function valueProvider()
     {
         return [
-            'shouldBeValidWhenValueIsACreditCard' => ['value' => 5448280000000007,'expectedResult' => true],
-            'shouldBeValidWhenValueIsACreditCardAsString' => ['value' => '5448280000000007','expectedResult' => true],
-            'shouldNotBeValidWhenValueIsNotACreditCardAsString' => ['value' => '123','expectedResult' => false],
-            'shouldNotBeValidWhenValueIsEmpty' => ['value' => '','expectedResult' => false]
+            'shouldBeValidWhenValueIsANumber' => ['value' => 4928148506666302, 'expectedResult' => true],
+            'shouldBeValidWhenValueIsACreditCardAsString' => ['value' => '4928148506666302', 'expectedResult' => true],
+            'shouldNotBeValidWhenValueIsNotACreditCard' => ['value' => '12738', 'expectedResult' => false],
+            'shouldNotBeValidWhenValueIsEmpty' => ['value' => '', 'expectedResult' => false]
         ];
     }
-
-
-
 }

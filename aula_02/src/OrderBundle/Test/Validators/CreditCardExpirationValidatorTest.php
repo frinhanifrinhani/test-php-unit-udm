@@ -12,24 +12,19 @@ class CreditCardExpirationValidatorTest extends TestCase
      */
     public function testIsValid($value, $expectedResult)
     {
-
         $creditCardExpirationDate = new \DateTime($value);
-        $creditCardNumberValidator = new CreditCardExpirationValidator($creditCardExpirationDate);
+        $creditCardExpirationValidator = new CreditCardExpirationValidator($creditCardExpirationDate);
 
-        $isValid = $creditCardNumberValidator->isValid();
+        $isValid = $creditCardExpirationValidator->isValid();
 
         $this->assertEquals($expectedResult, $isValid);
-
     }
 
     public function valueProvider()
     {
         return [
-            'shouldBeValidWhenDateIsNotExpired' => ['value' => '2040-01-01','expectedResult' => true],
-            'shouldNotBeValidWhenDateIsExpired' => ['value' => '2005-01-01','expectedResult' => false],
+            'shouldBeValidWhenDateIsNotExpired' => ['value' => '2040-01-01', 'expectedResult' => true],
+            'shouldNotBeValidWhenDateIsExpired' => ['value' => '2005-01-01', 'expectedResult' => false],
         ];
     }
-
-
-
 }

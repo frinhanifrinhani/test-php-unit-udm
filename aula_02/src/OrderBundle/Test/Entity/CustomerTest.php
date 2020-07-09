@@ -5,35 +5,35 @@ namespace OrderBundle\Test\Entity;
 use OrderBundle\Entity\Customer;
 use PHPUnit\Framework\TestCase;
 
-class CostumerTest extends TestCase{
-
+class CustomerTest extends TestCase
+{
     /**
      * @test
      * @dataProvider customerAllowedDataProvider
-    */
-    public function isAllowedToOrder($isActive,$isBlocked,$expectedAlloed)
+     */
+    public function isAllowedToOrder($isActive, $isBlocked, $expectedAlloed)
     {
         $customer = new Customer(
             $isActive,
             $isBlocked,
-            'Thiago Frinhani',
-            '+5561999995555'
+            'Vinicius Oliveira',
+            '+5511955558888'
         );
 
         $isAllowed = $customer->isAllowedToOrder();
 
-        $this->assertEquals($expectedAlloed,$isAllowed);
+        $this->assertEquals($expectedAlloed, $isAllowed);
     }
 
     public function customerAllowedDataProvider()
     {
         return [
-            'shouldBeAllowedWhenIsActiveAndBlocked' => [
+            'shouldBeAllowedWhenIsActiveAndNotBlocked' => [
                 'isActive' => true,
                 'isBlocked' => false,
                 'expectedAllowed' => true
             ],
-            'shouldNotBeAllowedWhenActiveButIsBlocked' => [
+            'shouldNotBeAllowedWhenIsActiveButIsBlocked' => [
                 'isActive' => true,
                 'isBlocked' => true,
                 'expectedAllowed' => false
@@ -47,7 +47,8 @@ class CostumerTest extends TestCase{
                 'isActive' => false,
                 'isBlocked' => true,
                 'expectedAllowed' => false
-            ],
+            ]
         ];
     }
 }
+
