@@ -15,29 +15,20 @@ class GatewayTest extends TestCase
     public function shouldNotPayWhenAuthenticationFail()
     {
         $httpClient = $this->createMock(HttpClientInterface::class);
+        $httpClient->method('send')
+            ->will($this->returnCallback(
+                function ($method, $address, $body){
+                    return $this->fakeHttpClientSend($method, $address, $body);
+                }
+            ));
         $logger = $this->createMock(LoggerInterface::class);
-        $user = 'test';
-        $password = 'invalid-password';
-        $gateway = new Gateway($httpClient, $logger, $user, $password);
 
-        $map = [
-            [
-                'POST',
-                Gateway::BASE_URL . '/authenticate',
-                [
-                    'user' => $user,
-                    'password' => $password
-                ],
-                null
-            ]
-        ];
-        $httpClient
-            ->expects($this->once())
-            ->method('send')
-            ->will($this->returnValueMap($map));
+        $user = 'teste';
+        $password = 'invalid-password';
+        $gateway = new Gateway($httpClient, $logger,$user,$password);
 
         $paid = $gateway->pay(
-            'Vinicius Oliveira',
+            'Thiago Frinhani',
             5555444488882222,
             new \DateTime('now'),
             100
@@ -52,36 +43,23 @@ class GatewayTest extends TestCase
     public function shouldNotPayWhenFailOnGateway()
     {
         $httpClient = $this->createMock(HttpClientInterface::class);
+        $httpClient->method('send')
+            ->will($this->returnCallback(
+                function ($method, $address, $body){
+                    return $this->fakeHttpClientSend($method, $address, $body);
+                }
+            ));
         $logger = $this->createMock(LoggerInterface::class);
-        $user = 'test';
-        $password = 'valid-password';
-        $gateway = new Gateway($httpClient, $logger, $user, $password);
 
-        $token = 'meu-token';
-        $httpClient
-            ->expects($this->at(0))
-            ->method('send')
-            ->willReturn($token);
+        $user = 'teste';
+        $password = 'invalid-password';
+        $gateway = new Gateway($httpClient, $logger,$user,$password);
 
-        $httpClient
-            ->expects($this->at(1))
-            ->method('send')
-            ->willReturn(['paid' => false]);
-
-        $logger
-            ->expects($this->once())
-            ->method('log')
-            ->with('Payment failed');
-
-        $name = 'Vinicius Oliveira';
-        $creditCardNumber = 5555444488882222;
-        $value = 100;
-        $validity = new \DateTime('now');
         $paid = $gateway->pay(
-            $name,
-            $creditCardNumber,
-            $validity,
-            $value
+            'Thiago Frinhani',
+            5555444488882222,
+            new \DateTime('now'),
+            100
         );
 
         $this->assertEquals(false, $paid);
@@ -90,54 +68,50 @@ class GatewayTest extends TestCase
     /**
      * @test
      */
-    public function shouldSuccessfullyPayWhenGatewayReturnOk()
+    public function shouldSuccessfullyPayGatewayReturnOk()
     {
         $httpClient = $this->createMock(HttpClientInterface::class);
+        $httpClient->method('send')
+            ->will($this->returnCallback(
+                function ($method, $address, $body){
+                    return $this->fakeHttpClientSend($method, $address, $body);
+                }
+            ));
         $logger = $this->createMock(LoggerInterface::class);
-        $user = 'test';
-        $password = 'valid-password';
-        $gateway = new Gateway($httpClient, $logger, $user, $password);
 
-        $name = 'Vinicius Oliveira';
-        $creditCardNumber = 9999999999999999;
-        $validity = new \DateTime('now');
-        $value = 100;
-        $token = 'meu-token';
-        $map = [
-            [
-                'POST',
-                Gateway::BASE_URL . '/authenticate',
-                [
-                    'user' => $user,
-                    'password' => $password
-                ],
-                'meu-token'
-            ],
-            [
-                'POST',
-                Gateway::BASE_URL . '/pay',
-                [
-                    'name' => $name,
-                    'credit_card_number' => $creditCardNumber,
-                    'validity' => $validity,
-                    'value' => $value,
-                    'token' => $token
-                ],
-                ['paid' => true]
-            ]
-        ];
-        $httpClient
-            ->expects($this->atLeast(2))
-            ->method('send')
-            ->will($this->returnValueMap($map));
+        $user = 'teste';
+        $password = 'valid-password';
+        $gateway = new Gateway($httpClient, $logger,$user,$password);
 
         $paid = $gateway->pay(
-            $name,
-            $creditCardNumber,
-            $validity,
-            $value
+            'Thiago Frinhani',
+            9999999999999999,
+            new \DateTime('now'),
+            100
         );
 
         $this->assertEquals(true, $paid);
+    }
+
+    public function fakeHttpClientSend($method, $address, $body)
+    {
+        switch ($address){
+            case Gateway::BASE_URL . '/authenticate':
+                
+                if ($body['password'] != 'valid-password'){
+                    return null;
+                }
+                
+                return 'meu-token';
+                break;
+            case Gateway::BASE_URL . '/pay':
+
+                if ($body['credit_card_number'] == 9999999999999999){
+                    return ['paid' => true];
+                }
+                return ['paid' => false];
+                break;
+
+        }
     }
 }
