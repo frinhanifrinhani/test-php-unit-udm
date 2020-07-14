@@ -82,7 +82,7 @@ class GatewayTest extends TestCase
                     'credit_card_number' => $creditCardNumber,
                     'validity' => $validity,
                     'value' => $value,
-                    'token' => 'meu-token'
+                    'token' => $token
                 ],
                 ['paid' => false]
             ]
